@@ -1,5 +1,38 @@
 # Change Log
 
+## [v2.3.2](https://github.com/vultr/packer-builder-vultr/compare/v2.3.1..v2.3.2) (2021-06-07)
+### Dependencies
+- Packer-plugin-sdk v0.2.1 -> v0.2.3 [#135](https://github.com/vultr/packer-builder-vultr/pull/135) 
+
+### Documentation
+- Updated documentation README.md (from .mdx) [#136](https://github.com/vultr/packer-builder-vultr/pull/136)
+
+## [v2.3.1](https://github.com/vultr/packer-builder-vultr/compare/v2.3.0..v2.3.1) (2021-05-10)
+### Dependencies
+- GoVultr v2.4.20 -> v2.5.1 [#132](https://github.com/vultr/packer-builder-vultr/pull/132)
+- Hcl v2.9.1 -> v2.10.0 [#128](https://github.com/vultr/packer-builder-vultr/pull/128)
+- Packer-plugin-sdk v0.1.2 -> v0.2.1 [#131](https://github.com/vultr/packer-builder-vultr/pull/131) [#127](https://github.com/vultr/packer-builder-vultr/pull/127)
+- Go-cty v1.8.1 -> v1.8.3 [#129](https://github.com/vultr/packer-builder-vultr/pull/129)
+
+## [v2.3.0](https://github.com/vultr/packer-builder-vultr/compare/v2.2.1..v2.3.0) (2021-04-13)
+### Enhancements
+- Update plugin to support `packer init` [#120](https://github.com/vultr/packer-builder-vultr/pull/120)
+
+## [v2.2.1](https://github.com/vultr/packer-builder-vultr/compare/v2.2.0..v2.2.1) (2021-02-24)
+### Bug fixes
+- Updated HCL config to support API v2 type attributes [#116](https://github.com/vultr/packer-builder-vultr/pull/116)
+
+## [v2.2.0](https://github.com/vultr/packer-builder-vultr/compare/v2.1.0..v2.2.0) (2021-02-17)
+### Enhancements
+- Updated plugin to support Packer v1.7.0. This release does not support `packer init` this will be released in `v2.3.0` [#110](https://github.com/vultr/packer-builder-vultr/pull/110)
+
+## [v2.1.0](https://github.com/vultr/packer-builder-vultr/compare/v2.0.1..v2.1.0) (2021-02-16)
+### Bug
+- Remove the requirement to pass in `os_id` with other installation types. This is no longer required in API v2. [#105](https://github.com/vultr/packer-builder-vultr/pull/105)
+
+### Dependencies
+- GoVultr v2.3.2 -> v2.4.0 [#108](https://github.com/vultr/packer-builder-vultr/pull/108)
+
 ## [v2.0.1](https://github.com/vultr/packer-builder-vultr/compare/v2.0.0..v2.0.1) (2021-01-07)
 ### Dependencies
 - hcl 2.7.1 -> 2.8.1 [#98](https://github.com/vultr/packer-builder-vultr/pull/98)

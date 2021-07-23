@@ -11,7 +11,7 @@ import (
 const instancePath = "/v2/instances"
 
 // InstanceService is the interface to interact with the instance endpoints on the Vultr API
-// Link: https://www.vultr.com/api/v2/#tag/instances
+// Link: https://www.vultr.com/api/#tag/instances
 type InstanceService interface {
 	Create(ctx context.Context, instanceReq *InstanceCreateReq) (*Instance, error)
 	Get(ctx context.Context, instanceID string) (*Instance, error)
@@ -33,7 +33,7 @@ type InstanceService interface {
 	GetBandwidth(ctx context.Context, instanceID string) (*Bandwidth, error)
 	GetNeighbors(ctx context.Context, instanceID string) (*Neighbors, error)
 
-	ListPrivateNetworks(ctx context.Context, instanceID string) ([]PrivateNetwork, *Meta, error)
+	ListPrivateNetworks(ctx context.Context, instanceID string, options *ListOptions) ([]PrivateNetwork, *Meta, error)
 	AttachPrivateNetwork(ctx context.Context, instanceID, networkID string) error
 	DetachPrivateNetwork(ctx context.Context, instanceID, networkID string) error
 
@@ -93,6 +93,7 @@ type Instance struct {
 	Tag              string   `json:"tag"`
 	OsID             int      `json:"os_id"`
 	AppID            int      `json:"app_id"`
+	ImageID          string   `json:"image_id"`
 	FirewallGroupID  string   `json:"firewall_group_id"`
 	Features         []string `json:"features"`
 }
@@ -162,8 +163,8 @@ type BackupSchedule struct {
 // BackupScheduleReq struct used to create a backup schedule for an instance.
 type BackupScheduleReq struct {
 	Type string `json:"type"`
-	Hour int    `json:"hour,omitempty"`
-	Dow  int    `json:"dow,omitempty"`
+	Hour *int   `json:"hour,omitempty"`
+	Dow  *int   `json:"dow,omitempty"`
 	Dom  int    `json:"dom,omitempty"`
 }
 
@@ -214,6 +215,7 @@ type InstanceCreateReq struct {
 	OsID                 int      `json:"os_id,omitempty"`
 	ISOID                string   `json:"iso_id,omitempty"`
 	AppID                int      `json:"app_id,omitempty"`
+	ImageID              string   `json:"image_id,omitempty"`
 	FirewallGroupID      string   `json:"firewall_group_id,omitempty"`
 	Hostname             string   `json:"hostname,omitempty"`
 	IPXEChainURL         string   `json:"ipxe_chain_url,omitempty"`
@@ -237,6 +239,7 @@ type InstanceUpdateReq struct {
 	Tag                  string   `json:"tag,omitempty"`
 	OsID                 int      `json:"os_id,omitempty"`
 	AppID                int      `json:"app_id,omitempty"`
+	ImageID              string   `json:"image_id,omitempty"`
 	EnableIPv6           *bool    `json:"enable_ipv6,omitempty"`
 	EnablePrivateNetwork *bool    `json:"enable_private_network,omitempty"`
 	AttachPrivateNetwork []string `json:"attach_private_network,omitempty"`
@@ -459,12 +462,19 @@ func (i *InstanceServiceHandler) GetNeighbors(ctx context.Context, instanceID st
 }
 
 // ListPrivateNetworks currently attached to an instance.
-func (i *InstanceServiceHandler) ListPrivateNetworks(ctx context.Context, instanceID string) ([]PrivateNetwork, *Meta, error) {
+func (i *InstanceServiceHandler) ListPrivateNetworks(ctx context.Context, instanceID string, options *ListOptions) ([]PrivateNetwork, *Meta, error) {
 	uri := fmt.Sprintf("%s/%s/private-networks", instancePath, instanceID)
 	req, err := i.client.NewRequest(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, nil, err
 	}
+
+	newValues, err := query.Values(options)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req.URL.RawQuery = newValues.Encode()
 
 	networks := new(privateNetworksBase)
 	if err = i.client.DoWithContext(ctx, req, networks); err != nil {

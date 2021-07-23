@@ -11,6 +11,7 @@ import (
 const bmPath = "/v2/bare-metals"
 
 // BareMetalServerService is the interface to interact with the Bare Metal endpoints on the Vultr API
+// Link : https://www.vultr.com/api/#tag/baremetal
 type BareMetalServerService interface {
 	Create(ctx context.Context, bmCreate *BareMetalCreate) (*BareMetalServer, error)
 	Get(ctx context.Context, serverID string) (*BareMetalServer, error)
@@ -65,6 +66,7 @@ type BareMetalServer struct {
 	Tag             string   `json:"tag"`
 	OsID            int      `json:"os_id"`
 	AppID           int      `json:"app_id"`
+	ImageID         string   `json:"image_id"`
 	Features        []string `json:"features"`
 }
 
@@ -79,11 +81,13 @@ type BareMetalCreate struct {
 	Label           string   `json:"label,omitempty"`
 	SSHKeyIDs       []string `json:"sshkey_id,omitempty"`
 	AppID           int      `json:"app_id,omitempty"`
+	ImageID         string   `json:"image_id,omitempty"`
 	UserData        string   `json:"user_data,omitempty"`
 	ActivationEmail *bool    `json:"activation_email,omitempty"`
 	Hostname        string   `json:"hostname,omitempty"`
 	Tag             string   `json:"tag,omitempty"`
 	ReservedIPv4    string   `json:"reserved_ipv4,omitempty"`
+	PersistentPxe   *bool    `json:"persistent_pxe,omitempty"`
 }
 
 // BareMetalUpdate represents the optional parameters that can be set when updating a Bare Metal server
@@ -92,6 +96,7 @@ type BareMetalUpdate struct {
 	EnableIPv6 *bool  `json:"enable_ipv6,omitempty"`
 	Label      string `json:"label,omitempty"`
 	AppID      int    `json:"app_id,omitempty"`
+	ImageID    string `json:"image_id,omitempty"`
 	UserData   string `json:"user_data,omitempty"`
 	Tag        string `json:"tag,omitempty"`
 }
